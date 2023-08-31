@@ -123,7 +123,7 @@ public class GitlabMergeRequestDecorator extends DiscussionAwarePullRequestDecor
                 .orElse(null);
 
         try {
-            PipelineStatus pipelineStatus = new PipelineStatus("SonarQube",
+            PipelineStatus pipelineStatus = new PipelineStatus(analysis.getAnalysisProjectName(),
                     "SonarQube Status",
                     analysis.getQualityGateStatus() == QualityGate.Status.OK ? PipelineStatus.State.SUCCESS : PipelineStatus.State.FAILED,
                     analysisSummary.getDashboardUrl(),

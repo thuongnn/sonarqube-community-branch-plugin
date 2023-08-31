@@ -68,38 +68,38 @@ public abstract class DiscussionAwarePullRequestDecorator<C, P, U, D, N> impleme
         C client = createClient(almSettingDto, projectAlmSettingDto);
         
         P pullRequest = getPullRequest(client, almSettingDto, projectAlmSettingDto, analysis);
-        U user = getCurrentUser(client);
-        List<PostAnalysisIssueVisitor.ComponentIssue> openSonarqubeIssues = analysis.getScmReportableIssues();
+        // U user = getCurrentUser(client);
+        // List<PostAnalysisIssueVisitor.ComponentIssue> openSonarqubeIssues = analysis.getScmReportableIssues();
 
-        List<Triple<D, N, Optional<ProjectIssueIdentifier>>> currentProjectSonarqueComments = findOpenSonarqubeComments(client,
-                pullRequest,
-                user)
-                .stream()
-                .filter(comment -> isCommentFromCurrentProject(comment, analysis.getAnalysisProjectKey()))
-                .collect(Collectors.toList());
+        // List<Triple<D, N, Optional<ProjectIssueIdentifier>>> currentProjectSonarqueComments = findOpenSonarqubeComments(client,
+        //         pullRequest,
+        //         user)
+        //         .stream()
+        //         .filter(comment -> isCommentFromCurrentProject(comment, analysis.getAnalysisProjectKey()))
+        //         .collect(Collectors.toList());
 
-        List<String> commentKeysForOpenComments = closeOldDiscussionsAndExtractRemainingKeys(client,
-                user,
-                currentProjectSonarqueComments,
-                openSonarqubeIssues,
-                pullRequest);
+        // List<String> commentKeysForOpenComments = closeOldDiscussionsAndExtractRemainingKeys(client,
+        //         user,
+        //         currentProjectSonarqueComments,
+        //         openSonarqubeIssues,
+        //         pullRequest);
 
-        List<String> commitIds = getCommitIdsForPullRequest(client, pullRequest);
-        List<Pair<PostAnalysisIssueVisitor.ComponentIssue, String>> uncommentedIssues = findIssuesWithoutComments(openSonarqubeIssues,
-                commentKeysForOpenComments)
-                .stream()
-                .map(DiscussionAwarePullRequestDecorator::loadScmPathsForIssues)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(issue -> isIssueFromCommitInCurrentRequest(issue.getLeft(), commitIds, scmInfoRepository))
-                .collect(Collectors.toList());
+        // List<String> commitIds = getCommitIdsForPullRequest(client, pullRequest);
+        // List<Pair<PostAnalysisIssueVisitor.ComponentIssue, String>> uncommentedIssues = findIssuesWithoutComments(openSonarqubeIssues,
+        //         commentKeysForOpenComments)
+        //         .stream()
+        //         .map(DiscussionAwarePullRequestDecorator::loadScmPathsForIssues)
+        //         .filter(Optional::isPresent)
+        //         .map(Optional::get)
+        //         .filter(issue -> isIssueFromCommitInCurrentRequest(issue.getLeft(), commitIds, scmInfoRepository))
+        //         .collect(Collectors.toList());
 
-        uncommentedIssues.forEach(issue -> submitCommitNoteForIssue(client,
-                pullRequest,
-                issue.getLeft(),
-                issue.getRight(),
-                analysis,
-                reportGenerator.createAnalysisIssueSummary(issue.getLeft(), analysis)));
+        // uncommentedIssues.forEach(issue -> submitCommitNoteForIssue(client,
+        //         pullRequest,
+        //         issue.getLeft(),
+        //         issue.getRight(),
+        //         analysis,
+        //         reportGenerator.createAnalysisIssueSummary(issue.getLeft(), analysis)));
 
         AnalysisSummary analysisSummary = reportGenerator.createAnalysisSummary(analysis);
         submitSummaryNote(client, pullRequest, analysis, analysisSummary);
